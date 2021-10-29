@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
         try:
             title = soup.find('div', class_='c-hero__header').h1.text.strip()
-            print(f"scrapping {title}")
+            print(title)
         except():
             # Some random pages aren't built well, might be not needed in the future
             print('unknown event name')
@@ -41,9 +41,10 @@ if __name__ == "__main__":
         recurse_through_ufc_events(next_event)
 
 
-    with open('fights.csv', 'w', encoding='UTF8') as file:
+    with open('fights.csv', 'w', encoding='UTF8', newline='') as file:
         current_time_stamp = int(datetime.now().timestamp())
         writer = csv.writer(file)
         # Header
         writer.writerow(['first_fighter', 'second_fighter', 'result_1', 'result_2', 'date'])
+        print('started scrapping')
         recurse_through_ufc_events()
