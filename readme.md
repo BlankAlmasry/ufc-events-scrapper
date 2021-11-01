@@ -1,7 +1,7 @@
 # ufc events scrapper
 It will scrape all ufc fights into csv file
 
-the data it will scrape is  `first_fighter` `second_fighter` `result_1` `result_2` `date`
+the data it will scrape is  `fighter1` `fighter2` `result1` `result2` `date`
 Will fetch around 6500 Fights in 5 minutes 
 
 It's not multi-threaded for now
