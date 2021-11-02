@@ -3,6 +3,7 @@ import csv
 import itertools
 from datetime import datetime
 import requests as req
+from tqdm import tqdm
 
 """
 Will Search through Ufc cdn stats and return only ufc events
@@ -18,11 +19,10 @@ base = "https://d29dxerjsp82wz.cloudfront.net/api/v3/event/live/"
 if __name__ == "__main__":
     def iterate_through_ufc_events(event_id):
         data = req.get(base + str(event_id) + ".json").json()
+        # Api return empty LiveEventDetail object when event doesn't exist
+        # Ufc Organization id is 1, Dana white contender series is 67, I choose to not include other than ufc
         if not data["LiveEventDetail"] or data["LiveEventDetail"]["Organization"]["OrganizationId"] != 1:
-            # Api return empty LiveEventDetail object when event doesn't exist
-            # Ufc Organization id is 1, Dana white contender series is 67, I choose to not include other than ufc
             return
-        print(f'Scrapping {event_id}  {data["LiveEventDetail"]["Name"]}')
         date = data["LiveEventDetail"]["StartTime"][:10]
         for fight in data["LiveEventDetail"]["FightCard"]:
             fighters = []
@@ -48,7 +48,6 @@ if __name__ == "__main__":
         """
         possible_event_id_values = (itertools.chain(range(1, 122), range(263, 316), range(410, 1150)))
         with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
-            Executor.map(iterate_through_ufc_events, possible_event_id_values)
-        #
-        # for i in possible_event_id_values:
-        #     iterate_through_ufc_events(i)
+            tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
+                 total=914)
+            # cant calculate itertools.chain obj length without heavy calculation so hardcoded it for now
