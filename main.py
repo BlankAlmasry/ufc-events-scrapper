@@ -6,8 +6,8 @@ from tqdm import tqdm
 
 """
 Will Search through Ufc cdn stats and return only ufc events
-Will return the future events result as nothing in csv
-At the time of making this script thee last Scheduled Event had id of 1067
+Will return the future events results as nothing in csv
+At the time of making this script the last Scheduled Event had id of 1067, but it goes until 1350 anyway
 I FOUND NO PATTERN WHAT SO EVER regarding EventID numbers and anything regarding their corresponding data
 Looks to me stats comes from UFC/DWCS only since event id 819, and it's getting incremented since then
 """
@@ -52,9 +52,9 @@ if __name__ == "__main__":
             list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
                  total=914))
             # cant calculate itertools.chain obj length without heavy calculation so hardcoded it for now
-        possible_event_id_values = (n for n in range(1151, 1350))
 
         print('Searching for any possible random event IDS, You can pause if you wish')
+        possible_event_id_values = (n for n in range(1151, 1351))
         with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
             list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
                  total=200))
