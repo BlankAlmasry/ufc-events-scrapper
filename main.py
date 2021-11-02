@@ -1,3 +1,4 @@
+import concurrent.futures.thread
 import csv
 import itertools
 from datetime import datetime
@@ -45,7 +46,9 @@ if __name__ == "__main__":
          possibility for them to change in the future is very unlikely,
          since they use them for their stats site
         """
-        possible_event_id_values = (itertools.chain(range(1, 122),range(263, 316) , range(410, 1100)))
-        print(list(possible_event_id_values))
-        for i in possible_event_id_values:
-            iterate_through_ufc_events(i)
+        possible_event_id_values = (itertools.chain(range(1, 122), range(263, 316), range(410, 1150)))
+        with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
+            Executor.map(iterate_through_ufc_events, possible_event_id_values)
+        #
+        # for i in possible_event_id_values:
+        #     iterate_through_ufc_events(i)
