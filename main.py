@@ -49,6 +49,12 @@ if __name__ == "__main__":
         """
         possible_event_id_values = (itertools.chain(range(1, 122), range(263, 316), range(410, 1150)))
         with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
-            tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
-                 total=914)
+            list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
+                 total=914))
             # cant calculate itertools.chain obj length without heavy calculation so hardcoded it for now
+        possible_event_id_values = (n for n in range(1151, 1350))
+
+        print('Searching for any possible random event IDS, You can pause if you wish')
+        with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
+            list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
+                 total=200))
