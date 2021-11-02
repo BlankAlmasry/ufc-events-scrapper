@@ -1,7 +1,6 @@
 import concurrent.futures.thread
 import csv
 import itertools
-from datetime import datetime
 import requests as req
 from tqdm import tqdm
 
@@ -19,8 +18,11 @@ base = "https://d29dxerjsp82wz.cloudfront.net/api/v3/event/live/"
 if __name__ == "__main__":
     def iterate_through_ufc_events(event_id):
         data = req.get(base + str(event_id) + ".json").json()
-        # Api return empty LiveEventDetail object when event doesn't exist
-        # Ufc Organization id is 1, Dana white contender series is 67, I choose to not include other than ufc
+
+        """
+        Api return empty LiveEventDetail object when event doesn't exist
+        Ufc Organization id is 1, Dana white contender series is 67, I choose to not include other than ufc
+        """
         if not data["LiveEventDetail"] or data["LiveEventDetail"]["Organization"]["OrganizationId"] != 1:
             return
         date = data["LiveEventDetail"]["StartTime"][:10]
@@ -34,11 +36,10 @@ if __name__ == "__main__":
 
 
     with open('fights.csv', 'w', encoding='UTF8', newline='') as file:
-        current_time_stamp = int(datetime.now().timestamp())
         writer = csv.writer(file)
         # Header
         writer.writerow(["fighter1", "fighter2", "result1", "result2", "date"])
-        print('started scrapping')
+        print('scrapping')
         """
         Non UFC Event IDS
          123~262
