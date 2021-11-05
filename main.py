@@ -8,7 +8,7 @@ from tqdm import tqdm
 Will Search through Ufc cdn stats and return only ufc events
 Will return the future events results as nothing in csv
 At the time of making this script the last Scheduled Event had id of 1067, but it goes until 1350 anyway
-I FOUND NO PATTERN WHAT SO EVER regarding EventID numbers and anything regarding their corresponding data
+I FOUND NO PATTERN WHAT SO EVER regarding EventID numbers and anything regarding their corresponding events_id
 Looks to me stats comes from UFC/DWCS only since event id 819, and it's getting incremented since then
 """
 
@@ -42,13 +42,24 @@ if __name__ == "__main__":
         print('scrapping')
         # First load the well known events id
         with open('events_id.json', 'r') as f:
-            data = json.load(f)
-        possible_event_id_values = [n for n in range(1000, 1200) if n not in data]
+            events_id = json.load(f)
+        # compute the rest of the possible events id
 
+        """
+         the numbers is hard coded passed on the pattern i saw the api have
+         event ids incrementing over time so i check 50 before last event id
+         normally they jump like 5 or 6 but just put 50 as future insurance
+         i would estimate that it would about 6 years for all the future possible events to happen
+        """
+        possible_event_id_values = [n for n in range(max(events_id[-1] - 50, 1000), max(events_id[-1] - 50, 1000) + 250)
+                                    if
+                                    n not in events_id]
+        print(possible_event_id_values)
+        # Then iterate through the rest of the events
         with concurrent.futures.thread.ThreadPoolExecutor(max_workers=10) as executor:
-            list(tqdm(executor.map(iterate_through_ufc_events, data),
-                      total=len(data)))
-            print('Searching for events that aren\'t in events_id.json')
+            list(tqdm(executor.map(iterate_through_ufc_events, events_id),
+                      total=len(events_id)))
+            print('Searching for events that are n\'t in events_id.json')
             list(tqdm(executor.map(iterate_through_ufc_events, possible_event_id_values),
-                 total=len(possible_event_id_values)))
-            print('Done')
+                      total=len(possible_event_id_values)))
+        print('Done')

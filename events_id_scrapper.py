@@ -18,10 +18,10 @@ if __name__ == "__main__":
 
     with open('events_id.json', 'w', encoding='UTF8') as file:
         print('scrapping')
-        possible_event_id_values = range(1100)
+        possible_event_id_values = range(1300)
         with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
             list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
-                      total=1100))
+                      total=1300))
         json.dump(events_id, file)
 
     print('done')
