@@ -18,3 +18,4 @@ That's by far the best way to scrape ufc data, and it's very fast.
 
 I don't think the methods could bee improved, but the code probably could be, feel free to contribute if you have any
 ideas
+

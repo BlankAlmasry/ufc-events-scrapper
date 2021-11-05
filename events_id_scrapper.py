@@ -1,13 +1,18 @@
 import concurrent.futures.thread
 import json
-
 import requests as req
 from tqdm import tqdm
 
+"""
+You can Rerun the script to scrape the events id's again. 
+DO THAT IF IT"S OLD
+It should cover approx 6 years in advance, so you dont need to run it unless it's gets super old and unmaintained  
+"""
 base = "https://d29dxerjsp82wz.cloudfront.net/api/v3/event/live/"
 
 if __name__ == "__main__":
     events_id = []
+
 
     def iterate_through_ufc_events(event_id):
         data = req.get(base + str(event_id) + ".json").json()
