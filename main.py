@@ -1,8 +1,6 @@
 import concurrent.futures.thread
 import csv
-import itertools
 import json
-
 import requests as req
 from tqdm import tqdm
 
