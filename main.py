@@ -1,6 +1,8 @@
 import concurrent.futures.thread
 import csv
 import itertools
+import json
+
 import requests as req
 from tqdm import tqdm
 
@@ -40,21 +42,15 @@ if __name__ == "__main__":
         # Header
         writer.writerow(["fighter1", "fighter2", "result1", "result2", "date"])
         print('scrapping')
-        """
-        Non UFC Event IDS
-         123~262
-         317~410
-         possibility for them to change in the future is very unlikely,
-         since they use them for their stats site
-        """
-        possible_event_id_values = (itertools.chain(range(1, 122), range(263, 316), range(410, 1150)))
-        with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
-            list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
-                 total=914))
-            # cant calculate itertools.chain obj length without heavy calculation so hardcoded it for now
+        # First load the well known events id
+        with open('events_id.json', 'r') as f:
+            data = json.load(f)
+        possible_event_id_values = [n for n in range(1000, 1200) if n not in data]
 
-        print('Searching for any possible random event IDS, You can pause if you wish')
-        possible_event_id_values = (n for n in range(1151, 1351))
-        with concurrent.futures.thread.ThreadPoolExecutor() as Executor:
-            list(tqdm(Executor.map(iterate_through_ufc_events, possible_event_id_values),
-                 total=200))
+        with concurrent.futures.thread.ThreadPoolExecutor(max_workers=10) as executor:
+            list(tqdm(executor.map(iterate_through_ufc_events, data),
+                      total=len(data)))
+            print('Searching for events that aren\'t in events_id.json')
+            list(tqdm(executor.map(iterate_through_ufc_events, possible_event_id_values),
+                 total=len(possible_event_id_values)))
+            print('Done')
