@@ -54,12 +54,11 @@ if __name__ == "__main__":
         possible_event_id_values = [n for n in range(max(events_id[-1] - 50, 1000), max(events_id[-1] - 50, 1000) + 250)
                                     if
                                     n not in events_id]
-        print(possible_event_id_values)
-        # Then iterate through the rest of the events
+        # iterate through the events
         with concurrent.futures.thread.ThreadPoolExecutor(max_workers=10) as executor:
             list(tqdm(executor.map(iterate_through_ufc_events, events_id),
                       total=len(events_id)))
-            print('Searching for events that are n\'t in events_id.json')
+            print('Searching for events that are n\'t in pre-computed at events_id.json')
             list(tqdm(executor.map(iterate_through_ufc_events, possible_event_id_values),
                       total=len(possible_event_id_values)))
         print('Done')
